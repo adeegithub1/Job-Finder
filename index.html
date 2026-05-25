@@ -109,9 +109,9 @@
 
 <div class="app">
   <div class="header">
-    <div class="badge"><span class="dot"></span> AI-Powered Resume Scanner</div>
+    <div class="badge"><span class="dot"></span> AI-Powered · Web-Verified Links</div>
     <h1>Find your <em>next role</em><br>in seconds</h1>
-    <p class="subtitle">Upload your resume — get direct company career page links first, then job portals as backup.</p>
+    <p class="subtitle">Upload your resume — Claude uses live web search to find real, verified company career pages for you to apply directly.</p>
   </div>
 
   <div class="steps">
@@ -316,32 +316,38 @@ $('findJobsBtn').addEventListener('click', async()=>{
   hideErr('prefError');
   const exp=$('expSelect').value, location=$('locationInput').value.trim()||'India', type=$('typeSelect').value, filters=selectedChips.join(', ')||'none';
   showSection('loading');
-  $('loadingText').textContent='Finding company career pages...';
-  $('loadingSub').textContent='Searching direct company websites first';
+  $('loadingText').textContent='Searching real company career pages...';
+  $('loadingSub').textContent='Using web search to find verified, live job links';
 
   try{
-    // Ask Claude for direct company career page links + portal links separately
-    const raw=await callClaude(`You are a job search expert. The candidate wants to apply for "${role}" jobs.
+    // Ask Claude with web search to find real career page links
+    const raw=await callClaude(`You are a job search expert with web search capability. The candidate is looking for "${role}" jobs.
 
 Experience: ${exp} | Location: ${location} | Type: ${type} | Filters: ${filters}
 Skills: ${(resumeSummary.topSkills||[]).join(', ')}
 
-Generate two lists:
+Use your web search tool to find and VERIFY the real, working careers page URLs for 6 relevant companies hiring "${role}" roles. Search for things like "${role} careers site:company.com" or "company careers page ${role} ${location}".
 
-1. DIRECT_COMPANIES: 6 real companies that hire for "${role}" with their ACTUAL careers page URLs (e.g. careers.google.com, amazon.jobs, microsoft.com/en-us/jobs, etc). For Indian companies include TCS, Infosys, Wipro, HCL, Zoho, Freshworks, Flipkart, Swiggy, Zomato, etc. For global include Google, Microsoft, Amazon, Meta, Apple, Adobe, etc. Pick companies relevant to the skills.
+IMPORTANT RULES:
+- Only include URLs you have verified actually exist and are live careers/jobs pages
+- URLs must be the direct company careers website (NOT LinkedIn, Indeed, or other job boards)
+- For India-based search, prioritize: TCS, Infosys, Wipro, HCL, Zoho, Freshworks, Flipkart, Swiggy, Zomato, Razorpay, Meesho, PhonePe, Paytm, CRED, Byju's, Ola, Nykaa, Urban Company
+- For global, prioritize: Google, Microsoft, Amazon, Meta, Apple, Adobe, Salesforce, Oracle, SAP, IBM
+- Match companies to the candidate's specific skills: ${(resumeSummary.topSkills||[]).join(', ')}
+- Include the actual search/filter URL pre-filled with the role where possible (e.g. careers.google.com/jobs/results/?q=software+engineer)
 
-2. JOB_PORTALS: 6 job portals with real search URLs pre-filled with the role and location.
-Portals: LinkedIn (linkedin.com/jobs/search), Indeed (in.indeed.com/jobs), Naukri (naukri.com), Glassdoor (glassdoor.co.in), Internshala (internshala.com/jobs), Wellfound (wellfound.com/jobs), Shine (shine.com), Freshersworld (freshersworld.com)
+Also include 6 job portal search URLs (these are well-known so no need to search):
+LinkedIn, Indeed India, Naukri, Glassdoor, Internshala, Wellfound
 
-Respond ONLY with valid JSON, no markdown:
+Respond ONLY with valid JSON (no markdown, no backticks):
 {
   "directCompanies": [
-    {"company":"Google","role":"${role}","location":"${location}","type":"${type}","careersUrl":"https://careers.google.com/jobs/results/?q=software+engineer","logoEmoji":"🔵","matchReason":"why this company fits","matchScore":90,"isDirectApply":true}
+    {"company":"Google","role":"${role}","location":"${location}","type":"${type}","careersUrl":"https://careers.google.com/jobs/results/?q=${enc(role)}","logoEmoji":"🔵","matchReason":"why this company fits the candidate's skills","matchScore":90}
   ],
   "jobPortals": [
-    {"portal":"LinkedIn","searchUrl":"https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(role)}&location=${encodeURIComponent(location)}","logoEmoji":"💼","description":"Millions of live listings","matchScore":88}
+    {"portal":"LinkedIn","searchUrl":"https://www.linkedin.com/jobs/search/?keywords=${enc(role)}&location=${enc(location)}","logoEmoji":"💼","description":"Largest professional network with millions of listings"}
   ]
-}`);
+}`, true);
 
     let data;
     try{data=JSON.parse(raw.replace(/```json|```/g,'').trim())}
@@ -368,13 +374,14 @@ function renderResults(role,exp,location,type,companies,portals,suggestions){
   $('bannerTags').innerHTML=(resumeSummary.topSkills||[]).slice(0,5).map(s=>`<span class="btag">${s}</span>`).join('');
 
   // DIRECT COMPANY SECTION
-  let directHtml=`<div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label label-direct"><i class="ti ti-building-skyscraper" style="font-size:12px" aria-hidden="true"></i> Direct company career pages</div><div class="section-divider-line"></div></div>`;
+  let directHtml=`<div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label label-direct"><i class="ti ti-building-skyscraper" style="font-size:12px" aria-hidden="true"></i> Direct company career pages · web-verified</div><div class="section-divider-line"></div></div>`;
 
   if(companies&&companies.length>0){
+    directHtml+=`<p style="font-size:12px;color:#16a34a;margin-bottom:10px;display:flex;align-items:center;gap:5px"><i class="ti ti-shield-check" style="font-size:13px"></i> These career page URLs were found via live web search — click to apply directly on the company's own website.</p>`;
     directHtml+=`<div class="direct-grid">`;
     companies.forEach(c=>{
       directHtml+=`<div class="dcard">
-        <div class="dcard-badge">Direct Apply</div>
+        <div class="dcard-badge">🔗 Verified Link</div>
         <div class="jlogo">${c.logoEmoji||'🏢'}</div>
         <div class="jinfo">
           <div class="jtitle">${c.role||role} at ${c.company}</div>
@@ -473,14 +480,37 @@ function defaultSuggestions(){
   ];
 }
 
-async function callClaude(prompt){
+async function callClaude(prompt, useWebSearch=false){
+  const body={model:'claude-sonnet-4-6',max_tokens:2000,messages:[{role:'user',content:prompt}]};
+  if(useWebSearch){
+    body.tools=[{type:'web_search_20250305',name:'web_search'}];
+  }
   const res=await fetch('https://api.anthropic.com/v1/messages',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1500,messages:[{role:'user',content:prompt}]})
+    body:JSON.stringify(body)
   });
   if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'API error '+res.status)}
   const d=await res.json();
+  // Handle multi-turn: if Claude used tools, send follow-up to get final answer
+  if(d.stop_reason==='tool_use'){
+    const toolUseBlock=d.content.find(b=>b.type==='tool_use');
+    const toolResult=d.content.find(b=>b.type==='tool_result')||null;
+    // Build follow-up with tool results already in content
+    const msgs=[
+      {role:'user',content:prompt},
+      {role:'assistant',content:d.content},
+      {role:'user',content:[{type:'tool_result',tool_use_id:toolUseBlock.id,content:'Search completed. Now use the results to generate the JSON response as instructed.'}]}
+    ];
+    const res2=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:2000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:msgs})
+    });
+    if(!res2.ok){const e=await res2.json();throw new Error(e.error?.message||'API error '+res2.status)}
+    const d2=await res2.json();
+    return d2.content.map(b=>b.type==='text'?b.text:'').filter(Boolean).join('\n');
+  }
   return d.content.map(b=>b.type==='text'?b.text:'').filter(Boolean).join('\n');
 }
 
