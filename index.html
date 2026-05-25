@@ -101,6 +101,18 @@
   .stxt{font-size:13px;color:var(--color-text-primary);line-height:1.5;flex:1}
   .stxt strong{font-weight:600}
   .hidden{display:none!important}
+  /* Multi-role selector */
+  .role-selector{border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:10px 12px;background:var(--color-background-secondary);min-height:48px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;cursor:text;transition:border-color .15s}
+  .role-selector:focus-within{border-color:#4f46e5}
+  .role-chip{display:inline-flex;align-items:center;gap:5px;background:#4f46e5;color:white;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:500}
+  .role-chip-remove{background:none;border:none;color:white;cursor:pointer;font-size:14px;line-height:1;padding:0;opacity:.8}
+  .role-chip-remove:hover{opacity:1}
+  .role-input{border:none;outline:none;background:transparent;font-size:14px;color:var(--color-text-primary);font-family:'DM Sans',sans-serif;min-width:140px;flex:1}
+  .role-input::placeholder{color:var(--color-text-tertiary)}
+  .role-suggestions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .role-suggest-chip{padding:4px 11px;border-radius:999px;font-size:12px;font-weight:500;border:1px dashed var(--color-border-secondary);cursor:pointer;background:transparent;color:var(--color-text-secondary);transition:all .15s;display:inline-flex;align-items:center;gap:4px}
+  .role-suggest-chip:hover{border-color:#4f46e5;color:#4f46e5;background:rgba(79,70,229,.05)}
+  .exp-match-note{font-size:11px;color:#7c3aed;background:#f5f3ff;border:0.5px solid #ddd6fe;border-radius:var(--border-radius-md);padding:8px 12px;margin-top:10px;display:flex;align-items:flex-start;gap:6px;line-height:1.4}
   .errmsg{background:var(--color-background-danger);border:0.5px solid var(--color-border-danger);border-radius:var(--border-radius-md);padding:12px 16px;color:var(--color-text-danger);font-size:13px;margin-top:1rem;display:none}
   .back-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:13px;background:transparent;color:var(--color-text-secondary);cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:1.5rem;transition:border-color .15s}
   .back-btn:hover{border-color:var(--color-border-primary);color:var(--color-text-primary)}
@@ -152,7 +164,20 @@
     <div class="slabel">Step 2 — Confirm your preferences</div>
     <div id="resumeSnapshot" style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 16px;margin-bottom:1.5rem;font-size:13px;color:var(--color-text-secondary);line-height:1.6"></div>
     <div class="form-row">
-      <div class="fg"><label>Target Role</label><input type="text" id="roleInput" placeholder="e.g. Frontend Developer"></div>
+      <div class="fg" style="grid-column:1/-1">
+        <label>Target Roles <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--color-text-tertiary)">(select one or more)</span></label>
+        <div class="role-selector" id="roleSelector" onclick="document.getElementById('roleTextInput').focus()">
+          <!-- selected role chips injected here -->
+          <input type="text" id="roleTextInput" class="role-input" placeholder="Type a role and press Enter…" autocomplete="off">
+        </div>
+        <div class="role-suggestions" id="roleSuggestions"></div>
+        <div class="exp-match-note" id="expMatchNote" style="display:none">
+          <i class="ti ti-info-circle" style="font-size:13px;color:#7c3aed;flex-shrink:0;margin-top:1px"></i>
+          <span id="expMatchText"></span>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
       <div class="fg"><label>Years of Experience</label>
         <select id="expSelect">
           <option value="0-1">0–1 year (Fresher)</option>
@@ -162,9 +187,9 @@
           <option value="8+">8+ years (Senior)</option>
         </select>
       </div>
+      <div class="fg"><label>Location</label><input type="text" id="locationInput" placeholder="e.g. Bangalore, Remote, USA"></div>
     </div>
     <div class="form-row">
-      <div class="fg"><label>Location</label><input type="text" id="locationInput" placeholder="e.g. Bangalore, Remote, USA"></div>
       <div class="fg"><label>Job Type</label>
         <select id="typeSelect">
           <option value="Full-time">Full-time</option>
@@ -210,7 +235,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
 const $ = id => document.getElementById(id);
-let resumeText='', resumeSummary={}, selectedChips=[], fileData=null;
+let resumeText='', resumeSummary={}, selectedChips=[], fileData=null, selectedRoles=[];
 
 if(typeof pdfjsLib!=='undefined'){
   pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -259,19 +284,31 @@ Resume:
 ${resumeText}
 ---
 Respond ONLY with valid JSON, no markdown:
-{"name":"candidate name or Professional","currentRole":"job title","yearsExp":"e.g. 3-5 years","topSkills":["s1","s2","s3","s4","s5"],"industries":["i1","i2"],"education":"degree short","summary":"2 sentences about candidate"}`);
+{"name":"candidate name or Professional","currentRole":"job title","yearsExp":"e.g. 3-5 years","topSkills":["s1","s2","s3","s4","s5"],"industries":["i1","i2"],"education":"degree short","summary":"2 sentences about candidate","suggestedRoles":["role1","role2","role3","role4","role5"]}`);
 
     let p;
     try{p=JSON.parse(raw.replace(/```json|```/g,'').trim())}
-    catch{p={name:'Professional',currentRole:'Software Engineer',yearsExp:'3-5 years',topSkills:['JavaScript','Python','SQL','React','Node.js'],industries:['Technology'],education:"Bachelor's",summary:'Experienced professional with strong technical skills.'}}
+    catch{p={name:'Professional',currentRole:'Software Engineer',yearsExp:'3-5 years',topSkills:['JavaScript','Python','SQL','React','Node.js'],industries:['Technology'],education:"Bachelor's",summary:'Experienced professional with strong technical skills.',suggestedRoles:['Software Engineer','Full Stack Developer','Backend Developer','Frontend Developer','Product Engineer']}}
     resumeSummary=p;
     $('resumeSnapshot').innerHTML=`<strong>${p.name}</strong> · ${p.currentRole} · ${p.yearsExp} · ${p.education}<br><span style="color:var(--color-text-tertiary);font-size:12px">${p.summary}</span>`;
-    $('roleInput').value=p.currentRole||'';
+    // Seed multi-role selector with the primary role
+    selectedRoles=p.currentRole?[p.currentRole]:[];
+    renderRoleChips();
+    // Populate suggested roles
+    const sugRoles=p.suggestedRoles||[];
+    $('roleSuggestions').innerHTML=sugRoles.map(r=>`<button class="role-suggest-chip" onclick="addRole('${r.replace(/'/g,"\\'")}')"><i class="ti ti-plus" style="font-size:10px"></i>${r}</button>`).join('');
+    // Set exp from resume
+    const expMap={'0-1':'0-1','1-3':'1-3','3-5':'3-5','5-8':'5-8','8+':'8+'};
+    const detectedExp=Object.keys(expMap).find(k=>p.yearsExp&&p.yearsExp.includes(k.split('-')[0]));
+    if(detectedExp) $('expSelect').value=detectedExp;
     $('locationInput').value='Remote / India';
+    updateExpMatchNote();
     showSection('pref'); setStep(2,true);
   } catch(err){
-    resumeSummary={name:'Professional',currentRole:'',topSkills:[],summary:''};
+    resumeSummary={name:'Professional',currentRole:'',topSkills:[],summary:'',suggestedRoles:['Software Engineer','Data Analyst','Product Manager','UX Designer','Business Analyst']};
     $('resumeSnapshot').innerHTML=`<span style="color:var(--color-text-tertiary)">Could not auto-read file. Please fill your details below.</span>`;
+    selectedRoles=[];renderRoleChips();
+    $('roleSuggestions').innerHTML=resumeSummary.suggestedRoles.map(r=>`<button class="role-suggest-chip" onclick="addRole('${r.replace(/'/g,"\\'")}')"><i class="ti ti-plus" style="font-size:10px"></i>${r}</button>`).join('');
     showSection('pref'); setStep(2,true);
   }
 });
@@ -310,68 +347,133 @@ document.querySelectorAll('.chip').forEach(c=>{
   });
 });
 
+function addRole(role){
+  const r=role.trim();
+  if(!r||selectedRoles.includes(r)) return;
+  selectedRoles.push(r);
+  renderRoleChips();
+  updateExpMatchNote();
+  document.querySelectorAll('.role-suggest-chip').forEach(btn=>{
+    if(btn.textContent.trim().replace('+','').trim()===r) btn.style.display='none';
+  });
+}
+
+function removeRole(role){
+  selectedRoles=selectedRoles.filter(r=>r!==role);
+  renderRoleChips();
+  updateExpMatchNote();
+  document.querySelectorAll('.role-suggest-chip').forEach(btn=>{
+    if(btn.textContent.includes(role)) btn.style.display='';
+  });
+}
+
+function renderRoleChips(){
+  const selector=$('roleSelector');
+  selector.querySelectorAll('.role-chip').forEach(c=>c.remove());
+  const input=$('roleTextInput');
+  selectedRoles.forEach(r=>{
+    const chip=document.createElement('span');
+    chip.className='role-chip';
+    chip.innerHTML=`${r}<button class="role-chip-remove" onclick="removeRole(${JSON.stringify(r)})">×</button>`;
+    selector.insertBefore(chip,input);
+  });
+  input.placeholder=selectedRoles.length>0?'Add another role…':'Type a role and press Enter…';
+}
+
+function updateExpMatchNote(){
+  const exp=$('expSelect').value;
+  const expLabels={'0-1':'entry-level / fresher','1-3':'junior (1–3 yrs)','3-5':'mid-level (3–5 yrs)','5-8':'senior (5–8 yrs)','8+':'principal / lead (8+ yrs)'};
+  const note=$('expMatchNote');
+  if(selectedRoles.length>0){
+    $('expMatchText').textContent=`Jobs will be filtered for ${expLabels[exp]||exp} experience. Only companies actively hiring at this level will be shown.`;
+    note.style.display='flex';
+  } else { note.style.display='none'; }
+}
+
+$('expSelect').addEventListener('change', updateExpMatchNote);
+
+$('roleTextInput').addEventListener('keydown',e=>{
+  if((e.key==='Enter'||e.key===','||e.key===';')&&$('roleTextInput').value.trim()){
+    e.preventDefault();
+    addRole($('roleTextInput').value);
+    $('roleTextInput').value='';
+  } else if(e.key==='Backspace'&&!$('roleTextInput').value&&selectedRoles.length>0){
+    removeRole(selectedRoles[selectedRoles.length-1]);
+  }
+});
+
 $('findJobsBtn').addEventListener('click', async()=>{
-  const role=$('roleInput').value.trim();
-  if(!role){showErr('prefError','Please enter a target role.');return}
+  if(selectedRoles.length===0){showErr('prefError','Please select at least one target role.');return}
   hideErr('prefError');
+  const rolesStr=selectedRoles.join(', ');
+  const primaryRole=selectedRoles[0];
   const exp=$('expSelect').value, location=$('locationInput').value.trim()||'India', type=$('typeSelect').value, filters=selectedChips.join(', ')||'none';
+  const expLabels={'0-1':'entry-level / 0-1 year fresher','1-3':'junior level 1-3 years','3-5':'mid-level 3-5 years','5-8':'senior level 5-8 years','8+':'principal/lead 8+ years'};
+  const expLabel=expLabels[exp]||exp;
   showSection('loading');
   $('loadingText').textContent='Searching real company career pages...';
   $('loadingSub').textContent='Using web search to find verified, live job links';
 
   try{
-    // Ask Claude with web search to find real career page links
-    const raw=await callClaude(`You are a job search expert with web search capability. The candidate is looking for "${role}" jobs.
+    const raw=await callClaude(`You are a job search expert with web search capability. The candidate is looking for jobs matching these roles: ${rolesStr}.
 
-Experience: ${exp} | Location: ${location} | Type: ${type} | Filters: ${filters}
+Experience Level: ${expLabel} | Location: ${location} | Type: ${type} | Filters: ${filters}
 Skills: ${(resumeSummary.topSkills||[]).join(', ')}
 
-Use your web search tool to find and VERIFY the real, working careers page URLs for 6 relevant companies hiring "${role}" roles. Search for things like "${role} careers site:company.com" or "company careers page ${role} ${location}".
+CRITICAL EXPERIENCE MATCHING:
+- Only suggest companies/roles suitable for someone with ${expLabel} experience
+- Do NOT suggest senior/lead roles for freshers, do NOT suggest entry-level for seniors
+- Entry-level (0-1yr): suggest companies known for fresher hiring programs, campus recruitment, trainee roles
+- Junior (1-3yr): associate/junior titles, growing companies, startups
+- Mid-level (3-5yr): SDE-2 / Engineer II level, scale-up companies
+- Senior (5-8yr): senior/staff engineer, team lead roles
+- Principal (8+yr): principal/architect/director level
 
-IMPORTANT RULES:
-- Only include URLs you have verified actually exist and are live careers/jobs pages
-- URLs must be the direct company careers website (NOT LinkedIn, Indeed, or other job boards)
-- For India-based search, prioritize: TCS, Infosys, Wipro, HCL, Zoho, Freshworks, Flipkart, Swiggy, Zomato, Razorpay, Meesho, PhonePe, Paytm, CRED, Byju's, Ola, Nykaa, Urban Company
-- For global, prioritize: Google, Microsoft, Amazon, Meta, Apple, Adobe, Salesforce, Oracle, SAP, IBM
-- Match companies to the candidate's specific skills: ${(resumeSummary.topSkills||[]).join(', ')}
-- Include the actual search/filter URL pre-filled with the role where possible (e.g. careers.google.com/jobs/results/?q=software+engineer)
+Use your web search tool to find REAL, VERIFIED careers page URLs for 6 companies hiring "${rolesStr}" at ${expLabel} level. Search for "${primaryRole} ${expLabel} jobs careers" or specific company career pages.
 
-Also include 6 job portal search URLs (these are well-known so no need to search):
-LinkedIn, Indeed India, Naukri, Glassdoor, Internshala, Wellfound
+RULES:
+- URLs must be direct company careers pages (NOT job boards)
+- Pre-fill search with the role where possible
+- Match companies to skills: ${(resumeSummary.topSkills||[]).join(', ')}
+- For India: TCS, Infosys, Wipro, HCL, Zoho, Freshworks, Flipkart, Swiggy, Razorpay, PhonePe, CRED, Meesho, Nykaa etc
+- For global: Google, Microsoft, Amazon, Meta, Apple, Adobe, Salesforce, Oracle, SAP, IBM etc
+
+Also return 6 job portal URLs pre-filled for all the roles.
 
 Respond ONLY with valid JSON (no markdown, no backticks):
 {
   "directCompanies": [
-    {"company":"Google","role":"${role}","location":"${location}","type":"${type}","careersUrl":"https://careers.google.com/jobs/results/?q=${enc(role)}","logoEmoji":"🔵","matchReason":"why this company fits the candidate's skills","matchScore":90}
+    {"company":"Google","role":"${primaryRole}","experienceLevel":"${expLabel}","location":"${location}","type":"${type}","careersUrl":"https://careers.google.com/jobs/results/?q=${enc(primaryRole)}","logoEmoji":"🔵","matchReason":"why this company is right for this experience level","matchScore":90}
   ],
   "jobPortals": [
-    {"portal":"LinkedIn","searchUrl":"https://www.linkedin.com/jobs/search/?keywords=${enc(role)}&location=${enc(location)}","logoEmoji":"💼","description":"Largest professional network with millions of listings"}
+    {"portal":"LinkedIn","searchUrl":"https://www.linkedin.com/jobs/search/?keywords=${enc(rolesStr)}&location=${enc(location)}","logoEmoji":"💼","description":"Largest professional network"}
   ]
 }`, true);
 
     let data;
     try{data=JSON.parse(raw.replace(/```json|```/g,'').trim())}
-    catch{data={directCompanies:getDefaultCompanies(role,location,type),jobPortals:getDefaultPortals(role,location)}}
+    catch{data={directCompanies:getDefaultCompanies(primaryRole,location,type),jobPortals:getDefaultPortals(primaryRole,location)}}
 
-    const sugsRaw=await callClaude(`Give 5 career suggestions for someone targeting "${role}" with ${exp} experience. Skills: ${(resumeSummary.topSkills||[]).join(', ')}.
+    const sugsRaw=await callClaude(`Give 5 career suggestions for someone targeting "${rolesStr}" with ${expLabel} experience. Skills: ${(resumeSummary.topSkills||[]).join(', ')}.
 Respond ONLY with JSON array, no markdown:
 [{"icon":"ti-certificate","title":"Short title","text":"1-2 sentence advice"}]`);
     let sugs;
     try{sugs=JSON.parse(sugsRaw.replace(/```json|```/g,'').trim())}
     catch{sugs=defaultSuggestions()}
 
-    renderResults(role,exp,location,type,data.directCompanies||[],data.jobPortals||[],sugs);
+    renderResults(rolesStr,exp,location,type,data.directCompanies||[],data.jobPortals||[],sugs);
     showSection('results'); setStep(3,true);
   } catch(e){
-    renderResults(role,exp,location,type,getDefaultCompanies(role,location,type),getDefaultPortals(role,location),defaultSuggestions());
+    renderResults(selectedRoles.join(', '),exp,location,type,getDefaultCompanies(primaryRole,location,type),getDefaultPortals(primaryRole,location),defaultSuggestions());
     showSection('results'); setStep(3,true);
   }
 });
 
 function renderResults(role,exp,location,type,companies,portals,suggestions){
+  const expLabels={'0-1':'Fresher / 0-1yr','1-3':'Junior 1-3yr','3-5':'Mid-level 3-5yr','5-8':'Senior 5-8yr','8+':'Principal 8+yr'};
   $('bannerTitle').textContent=`${resumeSummary.name||'Your Profile'} — ${role}`;
-  $('bannerSub').textContent=`${exp} · ${type} · ${location}`;
-  $('bannerTags').innerHTML=(resumeSummary.topSkills||[]).slice(0,5).map(s=>`<span class="btag">${s}</span>`).join('');
+  $('bannerSub').textContent=`${expLabels[exp]||exp} · ${type} · ${location}`;
+  $('bannerTags').innerHTML=(resumeSummary.topSkills||[]).slice(0,5).map(s=>`<span class="btag">${s}</span>`).join('')+`<span class="btag" style="background:rgba(255,255,255,.35)">🎯 ${expLabels[exp]||exp}</span>`;
 
   // DIRECT COMPANY SECTION
   let directHtml=`<div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label label-direct"><i class="ti ti-building-skyscraper" style="font-size:12px" aria-hidden="true"></i> Direct company career pages · web-verified</div><div class="section-divider-line"></div></div>`;
@@ -389,6 +491,7 @@ function renderResults(role,exp,location,type,companies,portals,suggestions){
           <div class="jmeta">
             <span class="tag tloc"><i class="ti ti-map-pin" style="font-size:10px" aria-hidden="true"></i>${c.location||location}</span>
             <span class="tag ttype">${c.type||type}</span>
+            ${c.experienceLevel?`<span class="tag" style="background:#f5f3ff;color:#7c3aed">🎯 ${c.experienceLevel}</span>`:''}
             <span class="tag tmatch">⚡ ${c.matchScore||80}% match</span>
           </div>
           <div class="jreason">${c.matchReason||'Relevant role at a hiring company'}</div>
@@ -436,6 +539,7 @@ $('backBtn').addEventListener('click',()=>{
   showSection('upload');setStep(1);
   $('resumeFile').value='';$('fileInfo').classList.remove('show');$('scanBtn').disabled=true;
   selectedChips=[];document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  selectedRoles=[];renderRoleChips();$('roleSuggestions').innerHTML='';$('expMatchNote').style.display='none';
 });
 
 const enc=s=>encodeURIComponent(s||'');
