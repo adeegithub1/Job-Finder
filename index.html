@@ -27,8 +27,7 @@
   .btn-p:disabled{background:var(--color-border-secondary);color:var(--color-text-tertiary);transform:none;cursor:not-allowed}
   .steps{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:2rem}
   .step{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--color-text-tertiary)}
-  .step.active{color:#4f46e5}
-  .step.done{color:#22c55e}
+  .step.active{color:#4f46e5}.step.done{color:#22c55e}
   .snum{width:22px;height:22px;border-radius:50%;background:var(--color-background-secondary);border:1px solid var(--color-border-secondary);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600}
   .step.active .snum{background:#4f46e5;color:white;border-color:#4f46e5}
   .step.done .snum{background:#22c55e;color:white;border-color:#22c55e}
@@ -53,20 +52,47 @@
   .banner p{font-size:13px;opacity:.85}
   .btags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
   .btag{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:3px 10px;font-size:11px;font-weight:500}
-  .jobs-grid{display:grid;gap:12px;margin-bottom:1.5rem}
-  .jcard{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem 1.5rem;display:flex;align-items:flex-start;gap:1rem;transition:border-color .15s}
-  .jcard:hover{border-color:#4f46e5}
+
+  /* Section headers */
+  .section-divider{display:flex;align-items:center;gap:10px;margin:0 0 12px}
+  .section-divider-line{flex:1;height:0.5px;background:var(--color-border-tertiary)}
+  .section-divider-label{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;padding:4px 12px;border-radius:999px;border:0.5px solid}
+
+  .label-direct{color:#16a34a;border-color:#bbf7d0;background:#f0fdf4}
+  .label-portal{color:#6366f1;border-color:#c7d2fe;background:#eef2ff}
+
+  /* Direct company cards — prominent */
+  .direct-grid{display:grid;gap:12px;margin-bottom:1.5rem}
+  .dcard{background:var(--color-background-primary);border:1.5px solid #bbf7d0;border-radius:var(--border-radius-lg);padding:1.25rem 1.5rem;display:flex;align-items:flex-start;gap:1rem;transition:border-color .15s;position:relative}
+  .dcard:hover{border-color:#16a34a}
+  .dcard-badge{position:absolute;top:10px;right:12px;font-size:10px;font-weight:600;background:#dcfce7;color:#15803d;border-radius:999px;padding:2px 8px;letter-spacing:.04em}
+
+  /* Portal cards */
+  .portal-grid{display:grid;gap:10px;margin-bottom:1.5rem}
+  .pcard{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;display:flex;align-items:center;gap:12px;transition:border-color .15s}
+  .pcard:hover{border-color:#6366f1}
+
   .jlogo{width:44px;height:44px;border-radius:var(--border-radius-md);background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .jlogo-sm{width:36px;height:36px;border-radius:var(--border-radius-md);background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
   .jinfo{flex:1;min-width:0}
   .jtitle{font-size:15px;font-weight:600;color:var(--color-text-primary);margin-bottom:2px}
-  .jco{font-size:13px;color:var(--color-text-secondary);margin-bottom:8px}
+  .jco{font-size:13px;color:var(--color-text-secondary);margin-bottom:6px}
   .jmeta{display:flex;flex-wrap:wrap;gap:6px}
   .tag{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:500}
   .tloc{background:var(--color-background-info);color:var(--color-text-info)}
   .ttype{background:var(--color-background-success);color:var(--color-text-success)}
   .tmatch{background:var(--color-background-warning);color:var(--color-text-warning)}
-  .abtn{display:inline-flex;align-items:center;gap:6px;background:#4f46e5;color:white;padding:8px 16px;border-radius:var(--border-radius-md);font-size:13px;font-weight:500;text-decoration:none;flex-shrink:0;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:background .15s}
-  .abtn:hover{background:#4338ca}
+  .jreason{font-size:12px;color:var(--color-text-tertiary);margin-top:6px;line-height:1.4}
+
+  .abtn-direct{display:inline-flex;align-items:center;gap:6px;background:#16a34a;color:white;padding:9px 16px;border-radius:var(--border-radius-md);font-size:13px;font-weight:500;text-decoration:none;flex-shrink:0;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:background .15s;white-space:nowrap}
+  .abtn-direct:hover{background:#15803d}
+  .abtn-portal{display:inline-flex;align-items:center;gap:6px;background:var(--color-background-secondary);color:#4f46e5;padding:8px 14px;border-radius:var(--border-radius-md);font-size:13px;font-weight:500;text-decoration:none;flex-shrink:0;cursor:pointer;border:1px solid #c7d2fe;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap}
+  .abtn-portal:hover{background:#eef2ff}
+
+  .pinfo{flex:1;min-width:0}
+  .ptitle{font-size:14px;font-weight:600;color:var(--color-text-primary);margin-bottom:1px}
+  .psub{font-size:12px;color:var(--color-text-tertiary)}
+
   .scard{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.5rem;margin-bottom:1.5rem}
   .scard h3{font-size:15px;font-weight:600;color:var(--color-text-primary);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
   .sitem{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
@@ -76,22 +102,19 @@
   .stxt strong{font-weight:600}
   .hidden{display:none!important}
   .errmsg{background:var(--color-background-danger);border:0.5px solid var(--color-border-danger);border-radius:var(--border-radius-md);padding:12px 16px;color:var(--color-text-danger);font-size:13px;margin-top:1rem;display:none}
-  .platrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-  .plink{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:13px;font-weight:500;color:var(--color-text-primary);text-decoration:none;background:var(--color-background-secondary);transition:border-color .15s}
-  .plink:hover{border-color:#4f46e5;color:#4f46e5}
   .back-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:13px;background:transparent;color:var(--color-text-secondary);cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:1.5rem;transition:border-color .15s}
   .back-btn:hover{border-color:var(--color-border-primary);color:var(--color-text-primary)}
-  .pdf-progress{font-size:12px;color:var(--color-text-secondary);margin-top:8px;display:none}
+  .empty-note{font-size:13px;color:var(--color-text-tertiary);padding:12px 0;font-style:italic}
 </style>
 
 <div class="app">
   <div class="header">
     <div class="badge"><span class="dot"></span> AI-Powered Resume Scanner</div>
     <h1>Find your <em>next role</em><br>in seconds</h1>
-    <p class="subtitle">Upload your resume, tell us what you're looking for, and get real job links tailored to your skills.</p>
+    <p class="subtitle">Upload your resume — get direct company career page links first, then job portals as backup.</p>
   </div>
 
-  <div class="steps" id="stepsEl">
+  <div class="steps">
     <div class="step active" id="step1"><div class="snum">1</div> Upload Resume</div>
     <div class="ssep"></div>
     <div class="step" id="step2"><div class="snum">2</div> Preferences</div>
@@ -113,18 +136,15 @@
       <span class="fname" id="fileName">—</span>
       <span class="fsize" id="fileSize"></span>
     </div>
-    <div class="pdf-progress" id="pdfProgress">📄 Extracting PDF text...</div>
     <div class="errmsg" id="uploadError"></div>
-    <button class="btn-p" id="scanBtn" disabled>
-      <i class="ti ti-scan" aria-hidden="true"></i> Scan My Resume
-    </button>
+    <button class="btn-p" id="scanBtn" disabled><i class="ti ti-scan" aria-hidden="true"></i> Scan My Resume</button>
   </div>
 
   <!-- LOADING -->
   <div class="card loading" id="loadingSection">
     <div class="spinner"></div>
-    <div class="ltxt" id="loadingText">Analysing your resume...</div>
-    <div class="lsub" id="loadingSub">Claude AI is reading your skills and experience</div>
+    <div class="ltxt" id="loadingText">Reading your resume...</div>
+    <div class="lsub" id="loadingSub">Claude AI is analysing your skills and experience</div>
   </div>
 
   <!-- STEP 2 -->
@@ -147,23 +167,23 @@
       <div class="fg"><label>Location</label><input type="text" id="locationInput" placeholder="e.g. Bangalore, Remote, USA"></div>
       <div class="fg"><label>Job Type</label>
         <select id="typeSelect">
-          <option value="full-time">Full-time</option>
-          <option value="part-time">Part-time</option>
-          <option value="contract">Contract / Freelance</option>
-          <option value="internship">Internship</option>
-          <option value="remote">Remote Only</option>
+          <option value="Full-time">Full-time</option>
+          <option value="Part-time">Part-time</option>
+          <option value="Contract">Contract / Freelance</option>
+          <option value="Internship">Internship</option>
+          <option value="Remote">Remote Only</option>
         </select>
       </div>
     </div>
     <div class="fg" style="margin-bottom:1.25rem">
       <label>Quick Filters</label>
       <div class="chips" id="chips">
-        <div class="chip" data-v="urgent">Urgent Hiring</div>
         <div class="chip" data-v="startup">Startups</div>
-        <div class="chip" data-v="mnc">MNCs</div>
+        <div class="chip" data-v="mnc">MNCs / Big Tech</div>
         <div class="chip" data-v="wfh">Work from Home</div>
         <div class="chip" data-v="fresher">Fresher Friendly</div>
-        <div class="chip" data-v="top">Top Companies</div>
+        <div class="chip" data-v="product">Product Companies</div>
+        <div class="chip" data-v="service">Service Companies</div>
       </div>
     </div>
     <div class="errmsg" id="prefError"></div>
@@ -178,11 +198,8 @@
       <p id="bannerSub"></p>
       <div class="btags" id="bannerTags"></div>
     </div>
-    <div class="card" style="padding:1rem 1.5rem;margin-bottom:1.5rem">
-      <div style="font-size:13px;font-weight:600;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem">Apply directly on these platforms</div>
-      <div class="platrow" id="platformsRow"></div>
-    </div>
-    <div id="jobResultsWrap"></div>
+    <div id="directSection"></div>
+    <div id="portalSection"></div>
     <div class="scard">
       <h3><i class="ti ti-bulb" style="color:#f59e0b" aria-hidden="true"></i> Career suggestions</h3>
       <div id="suggestionsList"></div>
@@ -193,280 +210,290 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
 const $ = id => document.getElementById(id);
-let resumeText = '', resumeSummary = {}, selectedChips = [], fileData = null;
+let resumeText='', resumeSummary={}, selectedChips=[], fileData=null;
 
-if (typeof pdfjsLib !== 'undefined') {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+if(typeof pdfjsLib!=='undefined'){
+  pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 }
 
-$('resumeFile').addEventListener('change', e => handleFile(e.target.files[0]));
-const zone = $('uploadZone');
-zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
-zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
-zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); handleFile(e.dataTransfer.files[0]); });
+$('resumeFile').addEventListener('change', e=>handleFile(e.target.files[0]));
+const zone=$('uploadZone');
+zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over')});
+zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
+zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('drag-over');handleFile(e.dataTransfer.files[0])});
 
-function handleFile(file) {
-  if (!file) return;
-  const ext = file.name.split('.').pop().toLowerCase();
-  if (!['pdf','doc','docx','txt'].includes(ext)) { showErr('uploadError','Please upload a PDF, DOC, DOCX, or TXT file.'); return; }
+function handleFile(file){
+  if(!file) return;
+  const ext=file.name.split('.').pop().toLowerCase();
+  if(!['pdf','doc','docx','txt'].includes(ext)){showErr('uploadError','Please upload a PDF, DOC, DOCX, or TXT file.');return}
   hideErr('uploadError');
-  $('fileName').textContent = file.name;
-  $('fileSize').textContent = (file.size/1024).toFixed(0)+' KB';
+  $('fileName').textContent=file.name;
+  $('fileSize').textContent=(file.size/1024).toFixed(0)+' KB';
   $('fileInfo').classList.add('show');
-  $('scanBtn').disabled = false;
-  fileData = file;
+  $('scanBtn').disabled=false;
+  fileData=file;
 }
 
-$('scanBtn').addEventListener('click', async () => {
-  if (!fileData) return;
-  showSection('loading');
-  setStep(2);
-  let content = '';
-  const ext = fileData.name.split('.').pop().toLowerCase();
-
-  try {
-    if (ext === 'txt') {
-      content = await fileData.text();
-    } else if (ext === 'pdf') {
-      $('loadingText').textContent = 'Extracting PDF text...';
-      $('loadingSub').textContent = 'Using PDF.js to read your resume';
-      content = await extractPdfWithPdfJs(fileData);
+$('scanBtn').addEventListener('click', async()=>{
+  if(!fileData) return;
+  showSection('loading'); setStep(2);
+  let content='';
+  const ext=fileData.name.split('.').pop().toLowerCase();
+  try{
+    if(ext==='txt') content=await fileData.text();
+    else if(ext==='pdf'){
+      $('loadingText').textContent='Extracting PDF text...';
+      $('loadingSub').textContent='Using PDF.js to read your resume';
+      content=await extractPdf(fileData);
     } else {
-      // DOC/DOCX — read as binary and extract visible ASCII
-      content = await extractDocText(fileData);
+      content=await extractDoc(fileData);
     }
+    if(!content||content.trim().length<20) content=`Resume: ${fileData.name}`;
+    resumeText=content.slice(0,7000);
+    $('loadingText').textContent='Analysing with Claude AI...';
+    $('loadingSub').textContent='Identifying your skills, roles and experience...';
 
-    if (!content || content.trim().length < 20) {
-      content = `Resume file: ${fileData.name}. Candidate seeking a professional role.`;
-    }
-
-    resumeText = content.slice(0, 7000);
-    $('loadingText').textContent = 'Analysing with Claude AI...';
-    $('loadingSub').textContent = 'Identifying skills, experience and roles...';
-
-    const raw = await callClaude(`You are an expert resume analyst. Analyse this resume text and extract key info.
-
-Resume text:
+    const raw=await callClaude(`Analyse this resume and extract key information.
+Resume:
 ---
 ${resumeText}
 ---
+Respond ONLY with valid JSON, no markdown:
+{"name":"candidate name or Professional","currentRole":"job title","yearsExp":"e.g. 3-5 years","topSkills":["s1","s2","s3","s4","s5"],"industries":["i1","i2"],"education":"degree short","summary":"2 sentences about candidate"}`);
 
-Respond ONLY with valid JSON (no markdown fences, no extra text):
-{"name":"candidate full name or Professional","currentRole":"most likely current or target job title","yearsExp":"estimated experience like 3-5 years","topSkills":["skill1","skill2","skill3","skill4","skill5"],"industries":["industry1","industry2"],"education":"highest degree short form","summary":"2 concise sentences about this candidate"}`);
-
-    let parsed;
-    try { parsed = JSON.parse(raw.replace(/```json|```/g,'').trim()); }
-    catch { parsed = {name:'Professional',currentRole:'Software Engineer',yearsExp:'3-5 years',topSkills:['JavaScript','Python','SQL','React','Node.js'],industries:['Technology'],education:"Bachelor's",summary:'Experienced tech professional with strong development skills.'}; }
-
-    resumeSummary = parsed;
-    $('resumeSnapshot').innerHTML = `<strong>${parsed.name}</strong> · ${parsed.currentRole} · ${parsed.yearsExp} · ${parsed.education}<br><span style="color:var(--color-text-tertiary);font-size:12px">${parsed.summary}</span>`;
-    $('roleInput').value = parsed.currentRole || '';
-    $('locationInput').value = 'Remote / India';
-    showSection('pref'); setStep(2, true);
-
-  } catch(err) {
-    console.error(err);
-    showErr('uploadError', 'Could not process file. Try a TXT version of your resume, or type your details manually below.');
-    // fallback — let user proceed with manual input
-    resumeSummary = {name:'Professional',currentRole:'',topSkills:[],summary:''};
-    $('resumeSnapshot').innerHTML = `<span style="color:var(--color-text-tertiary)">Could not auto-read PDF. Please fill in your details below.</span>`;
-    showSection('pref'); setStep(2, true);
+    let p;
+    try{p=JSON.parse(raw.replace(/```json|```/g,'').trim())}
+    catch{p={name:'Professional',currentRole:'Software Engineer',yearsExp:'3-5 years',topSkills:['JavaScript','Python','SQL','React','Node.js'],industries:['Technology'],education:"Bachelor's",summary:'Experienced professional with strong technical skills.'}}
+    resumeSummary=p;
+    $('resumeSnapshot').innerHTML=`<strong>${p.name}</strong> · ${p.currentRole} · ${p.yearsExp} · ${p.education}<br><span style="color:var(--color-text-tertiary);font-size:12px">${p.summary}</span>`;
+    $('roleInput').value=p.currentRole||'';
+    $('locationInput').value='Remote / India';
+    showSection('pref'); setStep(2,true);
+  } catch(err){
+    resumeSummary={name:'Professional',currentRole:'',topSkills:[],summary:''};
+    $('resumeSnapshot').innerHTML=`<span style="color:var(--color-text-tertiary)">Could not auto-read file. Please fill your details below.</span>`;
+    showSection('pref'); setStep(2,true);
   }
 });
 
-async function extractPdfWithPdfJs(file) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const arrayBuffer = await file.arrayBuffer();
-      const typedArray = new Uint8Array(arrayBuffer);
-      const pdf = await pdfjsLib.getDocument({ data: typedArray }).promise;
-      let fullText = '';
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const content = await page.getTextContent();
-        const pageText = content.items.map(item => item.str).join(' ');
-        fullText += pageText + '\n';
-      }
-      resolve(fullText.trim());
-    } catch(e) {
-      reject(e);
-    }
-  });
+async function extractPdf(file){
+  const ab=await file.arrayBuffer();
+  const pdf=await pdfjsLib.getDocument({data:new Uint8Array(ab)}).promise;
+  let text='';
+  for(let i=1;i<=pdf.numPages;i++){
+    const page=await pdf.getPage(i);
+    const c=await page.getTextContent();
+    text+=c.items.map(x=>x.str).join(' ')+'\n';
+  }
+  return text.trim();
 }
 
-async function extractDocText(file) {
-  return new Promise(resolve => {
-    const reader = new FileReader();
-    reader.onload = e => {
-      const bytes = new Uint8Array(e.target.result);
-      let text = '';
-      for (let i = 0; i < bytes.length; i++) {
-        const c = bytes[i];
-        if (c >= 32 && c < 127) text += String.fromCharCode(c);
-        else if (c === 10 || c === 13) text += ' ';
-      }
-      // Clean up XML/binary noise from docx
-      const cleaned = text.replace(/<[^>]{0,200}>/g,' ').replace(/[^\x20-\x7E]/g,' ').replace(/\s{3,}/g,' ').trim();
-      resolve(cleaned.length > 50 ? cleaned : '');
+async function extractDoc(file){
+  return new Promise(resolve=>{
+    const r=new FileReader();
+    r.onload=e=>{
+      const bytes=new Uint8Array(e.target.result);
+      let t='';
+      for(let i=0;i<bytes.length;i++){const c=bytes[i];if(c>=32&&c<127)t+=String.fromCharCode(c);else if(c===10||c===13)t+=' '}
+      resolve(t.replace(/<[^>]{0,200}>/g,' ').replace(/\s{3,}/g,' ').trim());
     };
-    reader.onerror = () => resolve('');
-    reader.readAsArrayBuffer(file);
+    r.onerror=()=>resolve('');
+    r.readAsArrayBuffer(file);
   });
 }
 
-document.querySelectorAll('.chip').forEach(c => {
-  c.addEventListener('click', () => {
+document.querySelectorAll('.chip').forEach(c=>{
+  c.addEventListener('click',()=>{
     c.classList.toggle('active');
-    const v = c.dataset.v;
-    selectedChips = selectedChips.includes(v) ? selectedChips.filter(x=>x!==v) : [...selectedChips, v];
+    const v=c.dataset.v;
+    selectedChips=selectedChips.includes(v)?selectedChips.filter(x=>x!==v):[...selectedChips,v];
   });
 });
 
-$('findJobsBtn').addEventListener('click', async () => {
-  const role = $('roleInput').value.trim();
-  if (!role) { showErr('prefError','Please enter a target role.'); return; }
+$('findJobsBtn').addEventListener('click', async()=>{
+  const role=$('roleInput').value.trim();
+  if(!role){showErr('prefError','Please enter a target role.');return}
   hideErr('prefError');
-  const exp = $('expSelect').value, location = $('locationInput').value.trim()||'India / Remote', type = $('typeSelect').value, filters = selectedChips.join(', ')||'none';
+  const exp=$('expSelect').value, location=$('locationInput').value.trim()||'India', type=$('typeSelect').value, filters=selectedChips.join(', ')||'none';
   showSection('loading');
-  $('loadingText').textContent = 'Finding real job matches...';
-  $('loadingSub').textContent = 'Building direct apply links for your profile';
+  $('loadingText').textContent='Finding company career pages...';
+  $('loadingSub').textContent='Searching direct company websites first';
 
-  try {
-    const jobsRaw = await callClaude(`You are a job search expert. Generate 8 job matches with real working URLs.
+  try{
+    // Ask Claude for direct company career page links + portal links separately
+    const raw=await callClaude(`You are a job search expert. The candidate wants to apply for "${role}" jobs.
 
-Target Role: ${role}
-Experience: ${exp}
-Location: ${location}
-Job Type: ${type}
-Filters: ${filters}
+Experience: ${exp} | Location: ${location} | Type: ${type} | Filters: ${filters}
 Skills: ${(resumeSummary.topSkills||[]).join(', ')}
 
-Use REAL job portal search URL patterns:
-- LinkedIn: https://www.linkedin.com/jobs/search/?keywords=ROLE&location=LOCATION
-- Indeed: https://in.indeed.com/jobs?q=ROLE&l=LOCATION
-- Naukri: https://www.naukri.com/ROLE-jobs-in-LOCATION (lowercase, hyphens)
-- Glassdoor: https://www.glassdoor.co.in/Job/jobs.htm?sc.keyword=ROLE
-- Internshala: https://internshala.com/jobs/ROLE-jobs
-- Wellfound: https://wellfound.com/jobs?roles[]=${encodeURIComponent(role)}
-- Shine: https://www.shine.com/job-search/ROLE-jobs
-- Freshersworld: https://www.freshersworld.com/jobs/jobsearch/ROLE-jobs
+Generate two lists:
 
-Respond ONLY with valid JSON array, no markdown:
-[{"title":"Job Title","company":"Company or Platform","location":"City or Remote","type":"Full-time","platform":"LinkedIn","matchReason":"1 sentence why","url":"https://...","logoEmoji":"emoji","matchScore":85}]`);
+1. DIRECT_COMPANIES: 6 real companies that hire for "${role}" with their ACTUAL careers page URLs (e.g. careers.google.com, amazon.jobs, microsoft.com/en-us/jobs, etc). For Indian companies include TCS, Infosys, Wipro, HCL, Zoho, Freshworks, Flipkart, Swiggy, Zomato, etc. For global include Google, Microsoft, Amazon, Meta, Apple, Adobe, etc. Pick companies relevant to the skills.
 
-    let jobs;
-    try { jobs = JSON.parse(jobsRaw.replace(/```json|```/g,'').trim()); }
-    catch { jobs = fallbackJobs(role, location, type); }
+2. JOB_PORTALS: 6 job portals with real search URLs pre-filled with the role and location.
+Portals: LinkedIn (linkedin.com/jobs/search), Indeed (in.indeed.com/jobs), Naukri (naukri.com), Glassdoor (glassdoor.co.in), Internshala (internshala.com/jobs), Wellfound (wellfound.com/jobs), Shine (shine.com), Freshersworld (freshersworld.com)
 
-    const sugRaw = await callClaude(`Give 5 career suggestions for someone targeting "${role}" with ${exp} experience. Skills: ${(resumeSummary.topSkills||[]).join(', ')}.
-Respond ONLY with valid JSON array, no markdown:
-[{"icon":"ti-certificate","title":"Short title","text":"1-2 sentence actionable advice"}]
-Icons to use: ti-certificate ti-trending-up ti-users ti-code ti-briefcase ti-star ti-book ti-brand-linkedin ti-target ti-award`);
+Respond ONLY with valid JSON, no markdown:
+{
+  "directCompanies": [
+    {"company":"Google","role":"${role}","location":"${location}","type":"${type}","careersUrl":"https://careers.google.com/jobs/results/?q=software+engineer","logoEmoji":"🔵","matchReason":"why this company fits","matchScore":90,"isDirectApply":true}
+  ],
+  "jobPortals": [
+    {"portal":"LinkedIn","searchUrl":"https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(role)}&location=${encodeURIComponent(location)}","logoEmoji":"💼","description":"Millions of live listings","matchScore":88}
+  ]
+}`);
 
-    let suggestions;
-    try { suggestions = JSON.parse(sugRaw.replace(/```json|```/g,'').trim()); }
-    catch { suggestions = defaultSuggestions(); }
+    let data;
+    try{data=JSON.parse(raw.replace(/```json|```/g,'').trim())}
+    catch{data={directCompanies:getDefaultCompanies(role,location,type),jobPortals:getDefaultPortals(role,location)}}
 
-    renderResults(role, exp, location, type, jobs, suggestions);
-    showSection('results'); setStep(3, true);
-  } catch(e) {
-    renderResults(role, exp, location, type, fallbackJobs(role, location, type), defaultSuggestions());
-    showSection('results'); setStep(3, true);
+    const sugsRaw=await callClaude(`Give 5 career suggestions for someone targeting "${role}" with ${exp} experience. Skills: ${(resumeSummary.topSkills||[]).join(', ')}.
+Respond ONLY with JSON array, no markdown:
+[{"icon":"ti-certificate","title":"Short title","text":"1-2 sentence advice"}]`);
+    let sugs;
+    try{sugs=JSON.parse(sugsRaw.replace(/```json|```/g,'').trim())}
+    catch{sugs=defaultSuggestions()}
+
+    renderResults(role,exp,location,type,data.directCompanies||[],data.jobPortals||[],sugs);
+    showSection('results'); setStep(3,true);
+  } catch(e){
+    renderResults(role,exp,location,type,getDefaultCompanies(role,location,type),getDefaultPortals(role,location),defaultSuggestions());
+    showSection('results'); setStep(3,true);
   }
 });
 
-function renderResults(role, exp, location, type, jobs, suggestions) {
-  $('bannerTitle').textContent = `${resumeSummary.name||'Your Profile'} — ${role}`;
-  $('bannerSub').textContent = `${exp} · ${type} · ${location}`;
-  $('bannerTags').innerHTML = (resumeSummary.topSkills||[]).slice(0,5).map(s=>`<span class="btag">${s}</span>`).join('');
+function renderResults(role,exp,location,type,companies,portals,suggestions){
+  $('bannerTitle').textContent=`${resumeSummary.name||'Your Profile'} — ${role}`;
+  $('bannerSub').textContent=`${exp} · ${type} · ${location}`;
+  $('bannerTags').innerHTML=(resumeSummary.topSkills||[]).slice(0,5).map(s=>`<span class="btag">${s}</span>`).join('');
 
-  const plats = [
-    {name:'LinkedIn',url:`https://www.linkedin.com/jobs/search/?keywords=${enc(role)}&location=${enc(location)}`,icon:'ti-briefcase'},
-    {name:'Indeed',url:`https://in.indeed.com/jobs?q=${enc(role)}&l=${enc(location)}`,icon:'ti-search'},
-    {name:'Naukri',url:`https://www.naukri.com/${slug(role)}-jobs-in-${slug(location)}`,icon:'ti-file-text'},
-    {name:'Glassdoor',url:`https://www.glassdoor.co.in/Job/jobs.htm?sc.keyword=${enc(role)}`,icon:'ti-building'},
-    {name:'Wellfound',url:`https://wellfound.com/jobs?roles[]=${enc(role)}`,icon:'ti-rocket'},
-    {name:'Internshala',url:`https://internshala.com/jobs/${slug(role)}-jobs`,icon:'ti-school'},
-    {name:'Shine',url:`https://www.shine.com/job-search/${slug(role)}-jobs`,icon:'ti-sun'},
-  ];
-  $('platformsRow').innerHTML = plats.map(p=>`<a class="plink" href="${p.url}" target="_blank" rel="noopener"><i class="ti ${p.icon}" style="font-size:14px" aria-hidden="true"></i>${p.name}</a>`).join('');
+  // DIRECT COMPANY SECTION
+  let directHtml=`<div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label label-direct"><i class="ti ti-building-skyscraper" style="font-size:12px" aria-hidden="true"></i> Direct company career pages</div><div class="section-divider-line"></div></div>`;
 
-  $('jobResultsWrap').innerHTML = `<div class="jobs-grid">${jobs.map(j=>`
-    <div class="jcard">
-      <div class="jlogo">${j.logoEmoji||'💼'}</div>
-      <div class="jinfo">
-        <div class="jtitle">${j.title}</div>
-        <div class="jco">${j.company} · ${j.platform}</div>
-        <div class="jmeta">
-          <span class="tag tloc"><i class="ti ti-map-pin" style="font-size:10px" aria-hidden="true"></i>${j.location}</span>
-          <span class="tag ttype">${j.type}</span>
-          <span class="tag tmatch">⚡ ${j.matchScore||80}% match</span>
+  if(companies&&companies.length>0){
+    directHtml+=`<div class="direct-grid">`;
+    companies.forEach(c=>{
+      directHtml+=`<div class="dcard">
+        <div class="dcard-badge">Direct Apply</div>
+        <div class="jlogo">${c.logoEmoji||'🏢'}</div>
+        <div class="jinfo">
+          <div class="jtitle">${c.role||role} at ${c.company}</div>
+          <div class="jco" style="color:#16a34a;font-weight:500">${c.company} Careers</div>
+          <div class="jmeta">
+            <span class="tag tloc"><i class="ti ti-map-pin" style="font-size:10px" aria-hidden="true"></i>${c.location||location}</span>
+            <span class="tag ttype">${c.type||type}</span>
+            <span class="tag tmatch">⚡ ${c.matchScore||80}% match</span>
+          </div>
+          <div class="jreason">${c.matchReason||'Relevant role at a hiring company'}</div>
         </div>
-        <div style="font-size:12px;color:var(--color-text-tertiary);margin-top:6px;line-height:1.4">${j.matchReason||''}</div>
-      </div>
-      <a class="abtn" href="${j.url}" target="_blank" rel="noopener">Apply <i class="ti ti-external-link" style="font-size:12px" aria-hidden="true"></i></a>
-    </div>`).join('')}</div>`;
+        <a class="abtn-direct" href="${c.careersUrl}" target="_blank" rel="noopener">
+          <i class="ti ti-external-link" style="font-size:12px" aria-hidden="true"></i> Apply Direct
+        </a>
+      </div>`;
+    });
+    directHtml+=`</div>`;
+  } else {
+    directHtml+=`<p class="empty-note">No direct company links found — see job portals below.</p>`;
+  }
+  $('directSection').innerHTML=directHtml;
 
-  $('suggestionsList').innerHTML = suggestions.map(s=>`
+  // PORTAL SECTION
+  let portalHtml=`<div class="section-divider" style="margin-top:.5rem"><div class="section-divider-line"></div><div class="section-divider-label label-portal"><i class="ti ti-world" style="font-size:12px" aria-hidden="true"></i> Job portals & aggregators</div><div class="section-divider-line"></div></div>`;
+
+  if(portals&&portals.length>0){
+    portalHtml+=`<div class="portal-grid">`;
+    portals.forEach(p=>{
+      portalHtml+=`<div class="pcard">
+        <div class="jlogo-sm">${p.logoEmoji||'🔍'}</div>
+        <div class="pinfo">
+          <div class="ptitle">${p.portal}</div>
+          <div class="psub">${p.description||'Search thousands of listings'}</div>
+        </div>
+        <a class="abtn-portal" href="${p.searchUrl}" target="_blank" rel="noopener">
+          Search <i class="ti ti-arrow-right" style="font-size:12px" aria-hidden="true"></i>
+        </a>
+      </div>`;
+    });
+    portalHtml+=`</div>`;
+  }
+  $('portalSection').innerHTML=portalHtml;
+
+  $('suggestionsList').innerHTML=suggestions.map(s=>`
     <div class="sitem">
       <div class="sicon"><i class="ti ${s.icon||'ti-bulb'}" style="font-size:16px;color:var(--color-text-secondary)" aria-hidden="true"></i></div>
       <div class="stxt"><strong>${s.title}</strong> — ${s.text}</div>
     </div>`).join('');
 }
 
-$('backBtn').addEventListener('click', () => {
-  showSection('upload'); setStep(1);
-  $('resumeFile').value=''; $('fileInfo').classList.remove('show'); $('scanBtn').disabled=true;
-  selectedChips=[]; document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+$('backBtn').addEventListener('click',()=>{
+  showSection('upload');setStep(1);
+  $('resumeFile').value='';$('fileInfo').classList.remove('show');$('scanBtn').disabled=true;
+  selectedChips=[];document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
 });
 
-const enc = s => encodeURIComponent(s||'');
-const slug = s => (s||'').toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+const enc=s=>encodeURIComponent(s||'');
+const slug=s=>(s||'').toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
 
-function fallbackJobs(role, location, type) {
+function getDefaultCompanies(role,location,type){
+  const isIndia=location.toLowerCase().includes('india')||location.toLowerCase().includes('bangalore')||location.toLowerCase().includes('mumbai')||location.toLowerCase().includes('delhi')||location.toLowerCase().includes('remote');
   return [
-    {title:role,company:'LinkedIn Jobs',platform:'LinkedIn',location,type,matchReason:'Millions of live listings matching your role',url:`https://www.linkedin.com/jobs/search/?keywords=${enc(role)}&location=${enc(location)}`,logoEmoji:'💼',matchScore:92},
-    {title:role,company:'Indeed India',platform:'Indeed',location,type,matchReason:"India's largest job portal with thousands of openings",url:`https://in.indeed.com/jobs?q=${enc(role)}&l=${enc(location)}`,logoEmoji:'🔍',matchScore:88},
-    {title:role,company:'Naukri.com',platform:'Naukri',location,type,matchReason:'Top destination for Indian professionals',url:`https://www.naukri.com/${slug(role)}-jobs`,logoEmoji:'📋',matchScore:85},
-    {title:role,company:'Glassdoor',platform:'Glassdoor',location,type,matchReason:'See salaries and reviews before applying',url:`https://www.glassdoor.co.in/Job/jobs.htm?sc.keyword=${enc(role)}`,logoEmoji:'🏢',matchScore:80},
-    {title:role+' (Startup)',company:'Wellfound',platform:'Wellfound',location,type,matchReason:'Curated startup and tech company roles',url:`https://wellfound.com/jobs?roles[]=${enc(role)}`,logoEmoji:'🚀',matchScore:78},
-    {title:role,company:'Internshala',platform:'Internshala',location,type,matchReason:'Great for freshers and early-career roles',url:`https://internshala.com/jobs/${slug(role)}-jobs`,logoEmoji:'🎓',matchScore:75},
-    {title:role,company:'Shine.com',platform:'Shine',location,type,matchReason:'Millions of verified jobs with salary data',url:`https://www.shine.com/job-search/${slug(role)}-jobs`,logoEmoji:'✨',matchScore:73},
-    {title:role,company:'Freshersworld',platform:'Freshersworld',location,type,matchReason:'Entry-level and fresher-friendly openings',url:`https://www.freshersworld.com/jobs/jobsearch/${slug(role)}-jobs`,logoEmoji:'🌱',matchScore:70},
+    {company:'Google',role,location,type,careersUrl:`https://careers.google.com/jobs/results/?q=${enc(role)}`,logoEmoji:'🔵',matchReason:'World-class engineering culture and strong compensation',matchScore:92},
+    {company:'Microsoft',role,location,type,careersUrl:`https://careers.microsoft.com/us/en/search-results?keywords=${enc(role)}`,logoEmoji:'🟦',matchReason:'Excellent benefits, remote-friendly and global presence',matchScore:90},
+    {company:'Amazon',role,location,type,careersUrl:`https://www.amazon.jobs/en/search?base_query=${enc(role)}&loc_query=${enc(location)}`,logoEmoji:'🟠',matchReason:'Massive scale, leadership principles driven culture',matchScore:88},
+    isIndia
+      ? {company:'Zoho',role,location,type,careersUrl:`https://careers.zohocorp.com/jobs/Careers`,logoEmoji:'🟢',matchReason:'Leading Indian product company with strong engineering focus',matchScore:86}
+      : {company:'Meta',role,location,type,careersUrl:`https://www.metacareers.com/jobs?q=${enc(role)}`,logoEmoji:'🔷',matchReason:'Cutting-edge tech and highly competitive compensation',matchScore:86},
+    isIndia
+      ? {company:'Flipkart',role,location,type,careersUrl:`https://www.flipkartcareers.com/#!/joblist`,logoEmoji:'🛍️',matchReason:"India's leading e-commerce company with fast-paced growth",matchScore:84}
+      : {company:'Apple',role,location,type,careersUrl:`https://jobs.apple.com/en-us/search?search=${enc(role)}`,logoEmoji:'🍎',matchReason:'World-class design and engineering environment',matchScore:84},
+    isIndia
+      ? {company:'Freshworks',role,location,type,careersUrl:`https://www.freshworks.com/company/careers/`,logoEmoji:'🌿',matchReason:'Fast-growing SaaS company with great engineering culture',matchScore:82}
+      : {company:'Adobe',role,location,type,careersUrl:`https://careers.adobe.com/us/en/search-results?keywords=${enc(role)}`,logoEmoji:'🔴',matchReason:'Creative and document tools leader with strong engineering teams',matchScore:82},
   ];
 }
 
-function defaultSuggestions() {
+function getDefaultPortals(role,location){
   return [
-    {icon:'ti-certificate',title:'Get certified',text:'A relevant cert (AWS, Google, Meta) can increase interview call rates by up to 40%.'},
+    {portal:'LinkedIn',searchUrl:`https://www.linkedin.com/jobs/search/?keywords=${enc(role)}&location=${enc(location)}`,logoEmoji:'💼',description:'Largest professional network with millions of listings'},
+    {portal:'Indeed',searchUrl:`https://in.indeed.com/jobs?q=${enc(role)}&l=${enc(location)}`,logoEmoji:'🔍',description:"India's most visited job portal"},
+    {portal:'Naukri',searchUrl:`https://www.naukri.com/${slug(role)}-jobs-in-${slug(location)}`,logoEmoji:'📋',description:'Top destination for Indian professionals'},
+    {portal:'Glassdoor',searchUrl:`https://www.glassdoor.co.in/Job/jobs.htm?sc.keyword=${enc(role)}`,logoEmoji:'🏢',description:'Jobs with salary and company review insights'},
+    {portal:'Wellfound',searchUrl:`https://wellfound.com/jobs?roles[]=${enc(role)}`,logoEmoji:'🚀',description:'Curated startup and tech company roles'},
+    {portal:'Internshala',searchUrl:`https://internshala.com/jobs/${slug(role)}-jobs`,logoEmoji:'🎓',description:'Fresher-friendly and internship openings'},
+  ];
+}
+
+function defaultSuggestions(){
+  return [
+    {icon:'ti-certificate',title:'Get certified',text:'A relevant cert (AWS, Google, Meta) can increase your interview call rate by up to 40%.'},
     {icon:'ti-trending-up',title:'Quantify achievements',text:'"Reduced load time by 35%" beats "improved performance" — always use numbers.'},
-    {icon:'ti-brand-linkedin',title:'Optimise LinkedIn',text:'Recruiters search daily. Add skills, a strong headline, and a summary for your target role.'},
+    {icon:'ti-brand-linkedin',title:'Optimise LinkedIn',text:'Recruiters search daily. Add skills, a strong headline, and a role-matching summary.'},
     {icon:'ti-users',title:'Network actively',text:'Over 70% of jobs are filled by referrals — reach out to 3 connections per week.'},
     {icon:'ti-code',title:'Build a portfolio',text:'2–3 strong GitHub projects demonstrate practical skills beyond the resume.'},
   ];
 }
 
-async function callClaude(prompt) {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+async function callClaude(prompt){
+  const res=await fetch('https://api.anthropic.com/v1/messages',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1500,messages:[{role:'user',content:prompt}]})
   });
-  if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message||'API error '+res.status); }
-  const data = await res.json();
-  return data.content.map(b=>b.type==='text'?b.text:'').filter(Boolean).join('\n');
+  if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'API error '+res.status)}
+  const d=await res.json();
+  return d.content.map(b=>b.type==='text'?b.text:'').filter(Boolean).join('\n');
 }
 
-function showSection(name) {
+function showSection(name){
   ['uploadSection','prefSection','resultsSection'].forEach(id=>$(id).classList.add('hidden'));
   $('loadingSection').classList.remove('show');
-  if (name==='upload') $('uploadSection').classList.remove('hidden');
-  else if (name==='loading') $('loadingSection').classList.add('show');
-  else if (name==='pref') $('prefSection').classList.remove('hidden');
-  else if (name==='results') $('resultsSection').classList.remove('hidden');
+  if(name==='upload') $('uploadSection').classList.remove('hidden');
+  else if(name==='loading') $('loadingSection').classList.add('show');
+  else if(name==='pref') $('prefSection').classList.remove('hidden');
+  else if(name==='results') $('resultsSection').classList.remove('hidden');
 }
 
-function setStep(n, done=false) {
+function setStep(n,done=false){
   [1,2,3].forEach(i=>{
     const el=$('step'+i);
     el.classList.remove('active','done');
