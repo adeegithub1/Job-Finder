@@ -1,0 +1,969 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .app {
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    background: var(--color-background-tertiary);
+    padding: 2rem 1rem;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: 999px;
+    padding: 4px 14px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-bottom: 1rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .header-badge .dot {
+    width: 6px; height: 6px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 5vw, 42px);
+    color: var(--color-text-primary);
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: #4f46e5;
+  }
+
+  .subtitle {
+    font-size: 15px;
+    color: var(--color-text-secondary);
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem;
+    max-width: 720px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    margin-bottom: 1rem;
+  }
+
+  .upload-zone {
+    border: 1.5px dashed var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .upload-zone:hover, .upload-zone.drag-over {
+    border-color: #4f46e5;
+    background: rgba(79, 70, 229, 0.04);
+  }
+
+  .upload-zone input[type="file"] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+
+  .upload-icon {
+    font-size: 36px;
+    color: var(--color-text-tertiary);
+    margin-bottom: 0.75rem;
+  }
+
+  .upload-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: 4px;
+  }
+
+  .upload-sub {
+    font-size: 13px;
+    color: var(--color-text-tertiary);
+  }
+
+  .file-info {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 12px 16px;
+    margin-top: 1rem;
+  }
+
+  .file-info.show { display: flex; }
+
+  .file-info i { color: #4f46e5; font-size: 20px; }
+
+  .file-name {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .file-size { font-size: 12px; color: var(--color-text-tertiary); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: var(--border-radius-md);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .btn-primary {
+    background: #4f46e5;
+    color: white;
+    width: 100%;
+    justify-content: center;
+    margin-top: 1.25rem;
+    padding: 13px 20px;
+    font-size: 15px;
+  }
+
+  .btn-primary:hover { background: #4338ca; transform: translateY(-1px); }
+  .btn-primary:disabled { background: var(--color-border-secondary); color: var(--color-text-tertiary); transform: none; cursor: not-allowed; }
+
+  .step-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 2rem;
+  }
+
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-text-tertiary);
+  }
+
+  .step.active { color: #4f46e5; }
+  .step.done { color: #22c55e; }
+
+  .step-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--color-background-secondary);
+    border: 1px solid var(--color-border-secondary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+  }
+
+  .step.active .step-num { background: #4f46e5; color: white; border-color: #4f46e5; }
+  .step.done .step-num { background: #22c55e; color: white; border-color: #22c55e; }
+
+  .step-sep { width: 32px; height: 1px; background: var(--color-border-tertiary); }
+
+  .loading-state {
+    display: none;
+    text-align: center;
+    padding: 3rem 1.5rem;
+  }
+
+  .loading-state.show { display: block; }
+
+  .spinner {
+    width: 40px; height: 40px;
+    border: 2.5px solid var(--color-border-tertiary);
+    border-top-color: #4f46e5;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 1rem;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: 4px;
+  }
+
+  .loading-sub { font-size: 13px; color: var(--color-text-tertiary); }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 520px) { .form-row { grid-template-columns: 1fr; } }
+
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .form-group select, .form-group input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: var(--border-radius-md);
+    border: 0.5px solid var(--color-border-secondary);
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .form-group select:focus, .form-group input[type="text"]:focus {
+    border-color: #4f46e5;
+  }
+
+  .chips-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .chip {
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid var(--color-border-secondary);
+    cursor: pointer;
+    background: var(--color-background-secondary);
+    color: var(--color-text-secondary);
+    transition: all 0.15s;
+  }
+
+  .chip.active {
+    background: #4f46e5;
+    color: white;
+    border-color: #4f46e5;
+  }
+
+  .results-section { max-width: 720px; margin: 0 auto; }
+
+  .profile-banner {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem 2rem;
+    color: white;
+    margin-bottom: 1.5rem;
+  }
+
+  .profile-banner h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    margin-bottom: 4px;
+    font-weight: 400;
+  }
+
+  .profile-banner p { font-size: 13px; opacity: 0.85; }
+
+  .profile-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .profile-tag {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .results-grid {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+
+  .job-card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .job-card:hover {
+    border-color: #4f46e5;
+  }
+
+  .company-logo {
+    width: 44px; height: 44px;
+    border-radius: var(--border-radius-md);
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .company-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: inherit; }
+
+  .job-info { flex: 1; min-width: 0; }
+
+  .job-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 2px;
+  }
+
+  .job-company {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    margin-bottom: 8px;
+  }
+
+  .job-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .tag-loc { background: var(--color-background-info); color: var(--color-text-info); }
+  .tag-type { background: var(--color-background-success); color: var(--color-text-success); }
+  .tag-match { background: var(--color-background-warning); color: var(--color-text-warning); }
+
+  .apply-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #4f46e5;
+    color: white;
+    padding: 8px 16px;
+    border-radius: var(--border-radius-md);
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    flex-shrink: 0;
+    cursor: pointer;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s;
+  }
+
+  .apply-btn:hover { background: #4338ca; }
+
+  .suggestions-card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .suggestions-card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .suggestion-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+
+  .suggestion-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .suggestion-icon {
+    width: 30px; height: 30px;
+    border-radius: var(--border-radius-md);
+    background: var(--color-background-secondary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .suggestion-text { font-size: 13px; color: var(--color-text-primary); line-height: 1.5; flex: 1; }
+  .suggestion-text strong { font-weight: 600; }
+
+  .hidden { display: none !important; }
+
+  .error-msg {
+    background: var(--color-background-danger);
+    border: 0.5px solid var(--color-border-danger);
+    border-radius: var(--border-radius-md);
+    padding: 12px 16px;
+    color: var(--color-text-danger);
+    font-size: 13px;
+    margin-top: 1rem;
+    display: none;
+  }
+
+  .platforms-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .platform-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    text-decoration: none;
+    background: var(--color-background-secondary);
+    transition: border-color 0.15s;
+  }
+
+  .platform-link:hover { border-color: #4f46e5; color: #4f46e5; }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    font-size: 13px;
+    background: transparent;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    margin-bottom: 1.5rem;
+    transition: border-color 0.15s;
+  }
+
+  .back-btn:hover { border-color: var(--color-border-primary); color: var(--color-text-primary); }
+</style>
+
+<div class="app">
+  <div class="header">
+    <div class="header-badge">
+      <span class="dot"></span>
+      AI-Powered Resume Scanner
+    </div>
+    <h1>Find your <em>next role</em><br>in seconds</h1>
+    <p class="subtitle">Upload your resume, tell us what you're looking for, and get real job links tailored to your skills.</p>
+  </div>
+
+  <div class="step-indicator" id="stepIndicator">
+    <div class="step active" id="step1"><div class="step-num">1</div> Upload Resume</div>
+    <div class="step-sep"></div>
+    <div class="step" id="step2"><div class="step-num">2</div> Your Preferences</div>
+    <div class="step-sep"></div>
+    <div class="step" id="step3"><div class="step-num">3</div> Job Matches</div>
+  </div>
+
+  <!-- STEP 1: Upload -->
+  <div class="card" id="uploadSection">
+    <div class="section-label">Step 1 — Upload your resume</div>
+    <div class="upload-zone" id="uploadZone">
+      <input type="file" id="resumeFile" accept=".pdf,.doc,.docx,.txt">
+      <div class="upload-icon"><i class="ti ti-file-cv" aria-hidden="true"></i></div>
+      <div class="upload-title">Drop your resume here</div>
+      <div class="upload-sub">PDF, DOC, DOCX or TXT · Max 10 MB</div>
+    </div>
+    <div class="file-info" id="fileInfo">
+      <i class="ti ti-file-text" aria-hidden="true"></i>
+      <span class="file-name" id="fileName">—</span>
+      <span class="file-size" id="fileSize"></span>
+    </div>
+    <div class="error-msg" id="uploadError"></div>
+    <button class="btn btn-primary" id="scanBtn" disabled>
+      <i class="ti ti-scan" aria-hidden="true"></i> Scan My Resume
+    </button>
+  </div>
+
+  <!-- LOADING -->
+  <div class="card loading-state" id="loadingSection">
+    <div class="spinner"></div>
+    <div class="loading-text" id="loadingText">Reading your resume...</div>
+    <div class="loading-sub" id="loadingSub">Claude AI is analysing your skills and experience</div>
+  </div>
+
+  <!-- STEP 2: Preferences -->
+  <div class="card hidden" id="prefSection">
+    <div class="section-label">Step 2 — Confirm your preferences</div>
+    <div id="resumeSnapshot" style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 16px;margin-bottom:1.5rem;font-size:13px;color:var(--color-text-secondary);line-height:1.6;"></div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Target Role / Job Title</label>
+        <input type="text" id="roleInput" placeholder="e.g. Frontend Developer">
+      </div>
+      <div class="form-group">
+        <label>Years of Experience</label>
+        <select id="expSelect">
+          <option value="0-1">0–1 year (Fresher)</option>
+          <option value="1-3">1–3 years</option>
+          <option value="3-5">3–5 years</option>
+          <option value="5-8">5–8 years</option>
+          <option value="8+">8+ years (Senior)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Preferred Location</label>
+        <input type="text" id="locationInput" placeholder="e.g. Bangalore, Remote, USA">
+      </div>
+      <div class="form-group">
+        <label>Job Type</label>
+        <select id="typeSelect">
+          <option value="full-time">Full-time</option>
+          <option value="part-time">Part-time</option>
+          <option value="contract">Contract / Freelance</option>
+          <option value="internship">Internship</option>
+          <option value="remote">Remote Only</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:1.25rem">
+      <label>Quick filters</label>
+      <div class="chips-wrap" id="chips">
+        <div class="chip" data-v="urgent">Urgent Hiring</div>
+        <div class="chip" data-v="startup">Startups</div>
+        <div class="chip" data-v="mnc">MNCs</div>
+        <div class="chip" data-v="wfh">Work from Home</div>
+        <div class="chip" data-v="fresher">Fresher Friendly</div>
+        <div class="chip" data-v="top">Top Companies</div>
+      </div>
+    </div>
+
+    <div class="error-msg" id="prefError"></div>
+    <button class="btn btn-primary" id="findJobsBtn">
+      <i class="ti ti-search" aria-hidden="true"></i> Find Matching Jobs
+    </button>
+  </div>
+
+  <!-- STEP 3: Results -->
+  <div class="results-section hidden" id="resultsSection">
+    <button class="back-btn" id="backBtn">
+      <i class="ti ti-arrow-left" aria-hidden="true"></i> Start over
+    </button>
+
+    <div class="profile-banner" id="profileBanner">
+      <h3 id="bannerTitle">Your Profile</h3>
+      <p id="bannerSub">Matched results below</p>
+      <div class="profile-tags" id="bannerTags"></div>
+    </div>
+
+    <div class="card" style="padding:1rem 1.5rem;margin-bottom:1.5rem;">
+      <div style="font-size:13px;font-weight:600;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem;">Apply directly on these platforms</div>
+      <div class="platforms-row" id="platformsRow"></div>
+    </div>
+
+    <div id="jobResultsWrap"></div>
+
+    <div class="suggestions-card" id="suggestionsCard">
+      <h3><i class="ti ti-bulb" style="color:#f59e0b" aria-hidden="true"></i> Career suggestions</h3>
+      <div id="suggestionsList"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let resumeText = '';
+let resumeSummary = '';
+let selectedChips = [];
+let fileData = null;
+
+const $ = id => document.getElementById(id);
+
+$('resumeFile').addEventListener('change', e => handleFile(e.target.files[0]));
+
+const zone = $('uploadZone');
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); handleFile(e.dataTransfer.files[0]); });
+
+function handleFile(file) {
+  if (!file) return;
+  const ext = file.name.split('.').pop().toLowerCase();
+  if (!['pdf','doc','docx','txt'].includes(ext)) {
+    showError('uploadError', 'Please upload a PDF, DOC, DOCX, or TXT file.');
+    return;
+  }
+  hideError('uploadError');
+  $('fileName').textContent = file.name;
+  $('fileSize').textContent = (file.size / 1024).toFixed(0) + ' KB';
+  $('fileInfo').classList.add('show');
+  $('scanBtn').disabled = false;
+  fileData = file;
+}
+
+$('scanBtn').addEventListener('click', async () => {
+  if (!fileData) return;
+  showSection('loading');
+  setStep(2);
+
+  let content = '';
+  const ext = fileData.name.split('.').pop().toLowerCase();
+
+  if (ext === 'txt') {
+    content = await fileData.text();
+  } else if (ext === 'pdf') {
+    $('loadingText').textContent = 'Extracting PDF text...';
+    content = await extractPdfText(fileData);
+  } else {
+    content = `[${ext.toUpperCase()} Resume uploaded: ${fileData.name}]`;
+  }
+
+  resumeText = content.slice(0, 6000);
+  $('loadingText').textContent = 'Analysing with Claude AI...';
+  $('loadingSub').textContent = 'Identifying skills, experience and roles...';
+
+  try {
+    const analysis = await callClaude(`You are an expert resume analyst. Analyse this resume and extract structured info.
+Resume content:
+---
+${resumeText}
+---
+Respond ONLY with valid JSON, no markdown, no extra text:
+{
+  "name": "candidate name or 'Professional'",
+  "currentRole": "most likely job title",
+  "yearsExp": "estimated years like '3-5 years'",
+  "topSkills": ["skill1","skill2","skill3","skill4","skill5"],
+  "industries": ["industry1","industry2"],
+  "education": "highest degree short",
+  "summary": "2 sentence snapshot of candidate"
+}`);
+
+    let parsed;
+    try {
+      const clean = analysis.replace(/```json|```/g,'').trim();
+      parsed = JSON.parse(clean);
+    } catch {
+      parsed = { name:'Professional', currentRole:'Software Engineer', yearsExp:'3-5 years', topSkills:['JavaScript','Python','SQL'], industries:['Technology'], education:'Bachelor\'s', summary:'Experienced professional with strong technical skills.' };
+    }
+
+    resumeSummary = parsed;
+    $('resumeSnapshot').innerHTML = `<strong>${parsed.name}</strong> · ${parsed.currentRole} · ${parsed.yearsExp} · ${parsed.education}<br><span style="color:var(--color-text-tertiary)">${parsed.summary}</span>`;
+    $('roleInput').value = parsed.currentRole || '';
+    $('locationInput').value = 'Remote / India';
+
+    showSection('pref');
+    setStep(2, true);
+  } catch(err) {
+    showError('uploadError', 'Error analysing resume. Please try again.');
+    showSection('upload');
+  }
+});
+
+async function extractPdfText(file) {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const bytes = new Uint8Array(e.target.result);
+      let text = '';
+      for (let i = 0; i < bytes.length; i++) {
+        const c = bytes[i];
+        if ((c >= 32 && c < 127) || c === 10 || c === 13) text += String.fromCharCode(c);
+      }
+      const cleaned = text.replace(/[^\x20-\x7E\n]/g,' ').replace(/\s{3,}/g,' ').trim();
+      resolve(cleaned.length > 100 ? cleaned : `PDF Resume: ${file.name}. Could not fully parse - proceeding with filename.`);
+    };
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+document.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', () => {
+    c.classList.toggle('active');
+    const v = c.dataset.v;
+    selectedChips = selectedChips.includes(v) ? selectedChips.filter(x=>x!==v) : [...selectedChips, v];
+  });
+});
+
+$('findJobsBtn').addEventListener('click', async () => {
+  const role = $('roleInput').value.trim();
+  if (!role) { showError('prefError','Please enter a target role.'); return; }
+  hideError('prefError');
+
+  const exp = $('expSelect').value;
+  const location = $('locationInput').value.trim() || 'India / Remote';
+  const type = $('typeSelect').value;
+  const filters = selectedChips.join(', ') || 'none';
+
+  showSection('loading');
+  $('loadingText').textContent = 'Finding real job matches...';
+  $('loadingSub').textContent = 'Building direct apply links for your profile';
+
+  try {
+    const jobsRaw = await callClaude(`You are a job search expert. Generate real, working job listing links for this candidate.
+
+Candidate: ${resumeSummary.name || 'Professional'}
+Target Role: ${role}
+Experience: ${exp} years
+Location: ${location}
+Job Type: ${type}
+Preferences: ${filters}
+Skills: ${(resumeSummary.topSkills||[]).join(', ')}
+
+Generate 8 job matches from REAL platforms like LinkedIn, Indeed, Naukri, Glassdoor, Unstoppable, Internshala (if fresher), Wellfound, Dice, Google Jobs, etc.
+
+For each job, create a direct search/apply URL that will actually work and take the user to relevant listings. Use real search URLs like:
+- LinkedIn: https://www.linkedin.com/jobs/search/?keywords=ROLE&location=LOCATION
+- Indeed: https://in.indeed.com/jobs?q=ROLE&l=LOCATION
+- Naukri: https://www.naukri.com/ROLE-jobs-in-LOCATION
+- Glassdoor: https://www.glassdoor.co.in/Job/LOCATION-ROLE-jobs-...
+- Internshala: https://internshala.com/jobs/ROLE-jobs
+
+Respond ONLY with valid JSON array, no markdown:
+[
+  {
+    "title": "Job Title",
+    "company": "Company or Platform Name",
+    "location": "City / Remote",
+    "type": "Full-time",
+    "platform": "LinkedIn",
+    "matchReason": "Why this matches (1 short sentence)",
+    "url": "https://...",
+    "logoEmoji": "emoji for company/industry",
+    "matchScore": 85
+  }
+]`, true);
+
+    let jobs;
+    try {
+      const clean = jobsRaw.replace(/```json|```/g,'').trim();
+      jobs = JSON.parse(clean);
+    } catch {
+      jobs = getFallbackJobs(role, location, type);
+    }
+
+    const suggestRaw = await callClaude(`Give 5 career improvement suggestions for someone targeting "${role}" with ${exp} experience and skills: ${(resumeSummary.topSkills||[]).join(', ')}.
+Respond ONLY with valid JSON array:
+[{"icon":"ti icon name","title":"short title","text":"1-2 sentence actionable advice"}]
+Use real tabler icon names like ti-certificate, ti-trending-up, ti-users, ti-code, ti-briefcase, ti-star, ti-book.`);
+
+    let suggestions;
+    try {
+      const clean = suggestRaw.replace(/```json|```/g,'').trim();
+      suggestions = JSON.parse(clean);
+    } catch {
+      suggestions = getDefaultSuggestions();
+    }
+
+    renderResults(role, exp, location, type, jobs, suggestions);
+    showSection('results');
+    setStep(3, true);
+  } catch(err) {
+    const jobs = getFallbackJobs(role, location, type);
+    renderResults(role, exp, location, type, jobs, getDefaultSuggestions());
+    showSection('results');
+    setStep(3, true);
+  }
+});
+
+function renderResults(role, exp, location, type, jobs, suggestions) {
+  $('bannerTitle').textContent = `${resumeSummary.name || 'Your'} — ${role}`;
+  $('bannerSub').textContent = `${exp} · ${type} · ${location}`;
+
+  const tagsHtml = (resumeSummary.topSkills||[]).slice(0,5).map(s=>`<span class="profile-tag">${s}</span>`).join('');
+  $('bannerTags').innerHTML = tagsHtml;
+
+  const platforms = [
+    { name:'LinkedIn', url: `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(role)}&location=${encodeURIComponent(location)}`, icon:'ti-brand-linkedin' },
+    { name:'Indeed', url: `https://in.indeed.com/jobs?q=${encodeURIComponent(role)}&l=${encodeURIComponent(location)}`, icon:'ti-briefcase' },
+    { name:'Naukri', url: `https://www.naukri.com/${role.toLowerCase().replace(/\s+/g,'-')}-jobs-in-${location.toLowerCase().replace(/\s+/g,'-')}`, icon:'ti-search' },
+    { name:'Glassdoor', url: `https://www.glassdoor.co.in/Job/${location.toLowerCase().replace(/\s+/g,'-')}-${role.toLowerCase().replace(/\s+/g,'-')}-jobs-SRCH_IL.0,8_IC1196701_KO9,30.htm`, icon:'ti-door' },
+    { name:'Internshala', url: `https://internshala.com/jobs/${role.toLowerCase().replace(/\s+/g,'-')}-jobs`, icon:'ti-school' },
+    { name:'Wellfound', url: `https://wellfound.com/jobs?roles%5B%5D=${encodeURIComponent(role)}`, icon:'ti-rocket' },
+    { name:'Freshersworld', url: `https://www.freshersworld.com/jobs/jobsearch/${role.toLowerCase().replace(/\s+/g,'-')}-jobs`, icon:'ti-users' },
+  ];
+
+  $('platformsRow').innerHTML = platforms.map(p =>
+    `<a class="platform-link" href="${p.url}" target="_blank" rel="noopener">
+      <i class="ti ${p.icon}" style="font-size:14px" aria-hidden="true"></i>${p.name}
+    </a>`
+  ).join('');
+
+  const jobsHtml = jobs.map(j => `
+    <div class="job-card">
+      <div class="company-logo">${j.logoEmoji||'💼'}</div>
+      <div class="job-info">
+        <div class="job-title">${j.title}</div>
+        <div class="job-company">${j.company} · ${j.platform}</div>
+        <div class="job-meta">
+          <span class="tag tag-loc"><i class="ti ti-map-pin" style="font-size:10px" aria-hidden="true"></i>${j.location}</span>
+          <span class="tag tag-type">${j.type}</span>
+          <span class="tag tag-match">⚡ ${j.matchScore||80}% match</span>
+        </div>
+        <div style="font-size:12px;color:var(--color-text-tertiary);margin-top:6px;line-height:1.4">${j.matchReason||''}</div>
+      </div>
+      <a class="apply-btn" href="${j.url}" target="_blank" rel="noopener">
+        Apply <i class="ti ti-external-link" style="font-size:12px" aria-hidden="true"></i>
+      </a>
+    </div>
+  `).join('');
+
+  $('jobResultsWrap').innerHTML = `<div class="results-grid">${jobsHtml}</div>`;
+
+  $('suggestionsList').innerHTML = suggestions.map(s => `
+    <div class="suggestion-item">
+      <div class="suggestion-icon"><i class="ti ${s.icon||'ti-bulb'}" style="font-size:16px;color:var(--color-text-secondary)" aria-hidden="true"></i></div>
+      <div class="suggestion-text"><strong>${s.title}</strong> — ${s.text}</div>
+    </div>
+  `).join('');
+}
+
+$('backBtn').addEventListener('click', () => {
+  showSection('upload');
+  setStep(1);
+  $('resumeFile').value = '';
+  $('fileInfo').classList.remove('show');
+  $('scanBtn').disabled = true;
+  selectedChips = [];
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+});
+
+function getFallbackJobs(role, location, type) {
+  const enc = s => encodeURIComponent(s);
+  return [
+    { title: role, company: 'LinkedIn Jobs', platform: 'LinkedIn', location: location, type: type, matchReason: 'Millions of real listings matching your search', url: `https://www.linkedin.com/jobs/search/?keywords=${enc(role)}&location=${enc(location)}`, logoEmoji: '💼', matchScore: 92 },
+    { title: role, company: 'Indeed India', platform: 'Indeed', location: location, type: type, matchReason: 'India\'s largest job portal with thousands of listings', url: `https://in.indeed.com/jobs?q=${enc(role)}&l=${enc(location)}`, logoEmoji: '🔍', matchScore: 88 },
+    { title: role, company: 'Naukri.com', platform: 'Naukri', location: location, type: type, matchReason: 'Top destination for Indian professionals', url: `https://www.naukri.com/${role.toLowerCase().replace(/\s+/g,'-')}-jobs`, logoEmoji: '📋', matchScore: 85 },
+    { title: role, company: 'Glassdoor', platform: 'Glassdoor', location: location, type: type, matchReason: 'See salaries and company reviews before applying', url: `https://www.glassdoor.co.in/Job/jobs.htm?sc.keyword=${enc(role)}`, logoEmoji: '🏢', matchScore: 80 },
+    { title: role + ' (Startup)', company: 'Wellfound (AngelList)', platform: 'Wellfound', location: location, type: type, matchReason: 'Curated startup and tech company roles', url: `https://wellfound.com/jobs?roles%5B%5D=${enc(role)}`, logoEmoji: '🚀', matchScore: 78 },
+    { title: role, company: 'Internshala Jobs', platform: 'Internshala', location: location, type: type, matchReason: 'Great for early-career and fresher-friendly listings', url: `https://internshala.com/jobs/${role.toLowerCase().replace(/\s+/g,'-')}-jobs`, logoEmoji: '🎓', matchScore: 75 },
+  ];
+}
+
+function getDefaultSuggestions() {
+  return [
+    { icon:'ti-certificate', title:'Get certified', text:'Adding a relevant certification (AWS, Google, Meta, etc.) can increase your interview call rate by up to 40%.' },
+    { icon:'ti-trending-up', title:'Quantify achievements', text:'Replace vague bullets with numbers. "Reduced load time by 35%" is far more compelling than "improved performance".' },
+    { icon:'ti-brand-linkedin', title:'Optimise LinkedIn', text:'Recruiters search LinkedIn daily. Add skills, a headline, and a summary matching your target role.' },
+    { icon:'ti-users', title:'Network actively', text:'Over 70% of jobs are filled through referrals. Reach out to 3 connections per week in your target industry.' },
+    { icon:'ti-code', title:'Build a portfolio', text:'A GitHub repo or personal site with 2–3 strong projects demonstrates practical skills beyond the resume.' },
+  ];
+}
+
+async function callClaude(prompt, useSearch = false) {
+  const body = {
+    model: 'claude-sonnet-4-20250514',
+    max_tokens: 1000,
+    messages: [{ role: 'user', content: prompt }],
+  };
+  if (useSearch) {
+    body.tools = [{ type: 'web_search_20250305', name: 'web_search' }];
+  }
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  const data = await res.json();
+  return data.content.map(b => b.type === 'text' ? b.text : '').filter(Boolean).join('\n');
+}
+
+function showSection(name) {
+  $('uploadSection').classList.add('hidden');
+  $('loadingSection').classList.remove('show');
+  $('prefSection').classList.add('hidden');
+  $('resultsSection').classList.add('hidden');
+
+  if (name === 'upload') $('uploadSection').classList.remove('hidden');
+  else if (name === 'loading') $('loadingSection').classList.add('show');
+  else if (name === 'pref') $('prefSection').classList.remove('hidden');
+  else if (name === 'results') $('resultsSection').classList.remove('hidden');
+}
+
+function setStep(n, done = false) {
+  [1,2,3].forEach(i => {
+    const el = $('step'+i);
+    el.classList.remove('active','done');
+    if (i < n || (i === n && done)) el.classList.add('done');
+    else if (i === n) el.classList.add('active');
+  });
+}
+
+function showError(id, msg) { $(id).textContent = msg; $(id).style.display = 'block'; }
+function hideError(id) { $(id).style.display = 'none'; }
+
+showSection('upload');
+</script>
